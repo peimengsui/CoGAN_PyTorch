@@ -58,6 +58,9 @@ class MNISTEDGE(data.Dataset):
         filename = os.path.join(self.root, self.filename)
         if os.path.isfile(filename):
             return
+        dirname = os.path.dirname(filename)
+        if not os.path.isdir(dirname):
+            os.mkdir(dirname)
         print("Download %s to %s" % (self.url, filename))
         urllib.urlretrieve(self.url, filename)
         print("[DONE]")
