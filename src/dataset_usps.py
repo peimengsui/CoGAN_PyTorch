@@ -30,6 +30,7 @@ class USPSSAMPLE(data.Dataset):
             self.train_data = self.train_data[indices[0:self.num_training_samples], ::]
             self.train_labels = self.train_labels[indices[0:self.num_training_samples]]
         self.train_data *= 255.0
+        self.train_data = self.train_data.transpose((0, 2, 3, 1))  # convert to HWC
 
     def __getitem__(self, index):
         img, label = self.train_data[index, ::], self.train_labels[index]
