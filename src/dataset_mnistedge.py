@@ -31,15 +31,15 @@ class MNISTEDGE(data.Dataset):
             self.train_labels_a = labels_a
             self.train_data_b = data_b * 255.0
             self.train_labels_b = labels_b
-            # self.train_data_a = self.train_data_a.transpose((0, 2, 3, 1))  # convert to HWC
-            # self.train_data_b = self.train_data_b.transpose((0, 2, 3, 1))  # convert to HWC
+            self.train_data_a = self.train_data_a.transpose((0, 2, 3, 1))  # convert to HWC
+            self.train_data_b = self.train_data_b.transpose((0, 2, 3, 1))  # convert to HWC
             print(self.train_data_a.shape)
             print(self.train_data_b.shape)
 
     def __getitem__(self, index):
         index_2 = np.random.randint(0, self.__len__(), 1)
         if self.train:
-            img_a, img_b = self.train_data_a[index, ::], self.train_data_b[index_2, 0, ::]
+            img_a, img_b = self.train_data_a[index, ::], self.train_data_b[index_2, ::].squeeze(axis=0)
         else:
             return
         if self.transform is not None:
