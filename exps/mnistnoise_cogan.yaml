@@ -1,0 +1,11 @@
+train:
+    max_iter: 5000
+    display: 10
+    snapshot_iter: 500
+    batch_size: 64
+    latent_dims: 100
+    log: ../outputs/mnistnoise_cogan/mnistnoise_cogan.log
+    snapshot_prefix: ../outputs/mnistnoise_cogan/mnistnoise_cogan
+    scale: 1.0
+    bias: 0.5
+    alpha: 0.1
