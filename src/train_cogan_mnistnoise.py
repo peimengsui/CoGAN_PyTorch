@@ -53,7 +53,7 @@ def main(argv):
                 continue
             images_a = Variable(images_a.cuda())
             images_b = Variable(images_b.cuda())
-            noise = Variable(torch.randn(config.batch_size, config.latent_dims)).cuda()
+	    noise = Variable(torch.randn(config.batch_size, config.latent_dims)).cuda()
             accuracy = trainer.dis_update(images_a, images_b, noise)
             noise = Variable(torch.randn(config.batch_size, config.latent_dims)).cuda()
             fake_images_a, fake_images_b = trainer.gen_update(noise)
@@ -66,12 +66,12 @@ def main(argv):
                 img_filename = '%s_gen_%08d.jpg' % (config.snapshot_prefix, iterations)
                 fake_images = torch.cat((fake_images_a, fake_images_b), 3)
                 torchvision.utils.save_image(config.scale*(fake_images.data-config.bias), img_filename)
-                # gen_filename = '%s_gen_%08d.pkl' % (config.snapshot_prefix, iterations)
-                # dis_filename = '%s_dis_%08d.pkl' % (config.snapshot_prefix, iterations)
-                # print("Save generator to %s" % gen_filename)
-                # print("Save discriminator to %s" % dis_filename)
-                # torch.save(trainer.gen.state_dict(), gen_filename)
-                # torch.save(trainer.dis.state_dict(), dis_filename)
+                gen_filename = '%s_gen_%08d.pkl' % (config.snapshot_prefix, iterations)
+                dis_filename = '%s_dis_%08d.pkl' % (config.snapshot_prefix, iterations)
+                print("Save generator to %s" % gen_filename)
+                print("Save discriminator to %s" % dis_filename)
+                torch.save(trainer.gen.state_dict(), gen_filename)
+                torch.save(trainer.dis.state_dict(), dis_filename)
             if iterations >= config.max_iter:
                 break
             iterations += 1
