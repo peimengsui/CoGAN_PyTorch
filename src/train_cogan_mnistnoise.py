@@ -39,7 +39,8 @@ def main(argv):
     #                             transform=transforms.ToTensor(),
     #                             target_transform=transforms.ToTensor())
 
-    train_dataset = OverlayDataset(config)
+    train_dataset = OverlayDataset()
+    train_dataset.initialize()
     train_loader = torch.utils.data.DataLoader(dataset=train_dataset,
                                                batch_size=config.batch_size,
                                                shuffle=True)

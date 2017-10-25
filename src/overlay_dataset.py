@@ -5,7 +5,7 @@ from pdb import set_trace as st
 import numpy as np
 import PIL
 from PIL import Image
-from skimage import img_as_ubyte
+from skimage import img_as_ubyte, img_as_float
 from skimage.io import imread
 
 import torchvision.transforms as transforms
@@ -16,10 +16,10 @@ from natsort import natsorted
 
 
 class OverlayDataset(BaseDataset):
-  def alpha_blend(noise_img, orig_img, alpha):
-  return alpha * noise_img + (1 - alpha) * orig_img
+  def alpha_blend(self, noise_img, orig_img, alpha):
+    return alpha * noise_img + (1 - alpha) * orig_img
 
-  def initialize(self, config):
+  def initialize(self):
     # self.opt = opt
     # self.root = opt.dataroot
     # self.dir_orig = os.path.join(opt.dataroot, opt.phase, 'original')
@@ -40,7 +40,7 @@ class OverlayDataset(BaseDataset):
     self.orig_permute_paths = np.random.permutation(len(self.orig_paths))
     self.orig_size = len(self.orig_paths)
     self.transform = get_transform()
-    self.alpha = config.alpha
+    self.alpha = 0.1
     self.imagemode = 'L'
 
   def __getitem__(self, index):
@@ -69,9 +69,8 @@ class OverlayDataset(BaseDataset):
     orig_img = Image.open(orig_path).convert('L')
     noise_img = Image.open(noise_path).convert('L')
     orig_pair_img = Image.open(orig_pair_path).convert('L')
-
     A_img = self.transform(orig_img)
-    blended_img = alpha_blend(np.array(noise_img), np.array(orig_pair_img), self.alpha)
+    blended_img = self.alpha_blend(np.array(img_as_float(noise_img)), np.array(img_as_float(orig_pair_img)), self.alpha)
     blended_img = img_as_ubyte(blended_img)
     B_img = self.transform(Image.fromarray(blended_img))
 
