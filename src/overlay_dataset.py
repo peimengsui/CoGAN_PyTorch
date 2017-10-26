@@ -19,7 +19,7 @@ class OverlayDataset(BaseDataset):
   def alpha_blend(self, noise_img, orig_img, alpha):
     return alpha * noise_img + (1 - alpha) * orig_img
 
-  def initialize(self):
+  def initialize(self, config):
     # self.opt = opt
     # self.root = opt.dataroot
     # self.dir_orig = os.path.join(opt.dataroot, opt.phase, 'original')
@@ -40,7 +40,7 @@ class OverlayDataset(BaseDataset):
     self.orig_permute_paths = np.random.permutation(len(self.orig_paths))
     self.orig_size = len(self.orig_paths)
     self.transform = get_transform()
-    self.alpha = 0.1
+    self.alpha = config.alpha
     self.imagemode = 'L'
 
   def __getitem__(self, index):

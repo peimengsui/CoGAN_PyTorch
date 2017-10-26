@@ -40,7 +40,7 @@ def main(argv):
     #                             target_transform=transforms.ToTensor())
 
     train_dataset = OverlayDataset()
-    train_dataset.initialize()
+    train_dataset.initialize(config)
     train_loader = torch.utils.data.DataLoader(dataset=train_dataset,
                                                batch_size=config.batch_size,
                                                shuffle=True)
@@ -66,13 +66,14 @@ def main(argv):
                 img_filename = '%s_gen_%08d.jpg' % (config.snapshot_prefix, iterations)
                 fake_images = torch.cat((fake_images_a, fake_images_b), 3)
                 torchvision.utils.save_image(config.scale*(fake_images.data-config.bias), img_filename)
-                gen_filename = '%s_gen_%08d.pkl' % (config.snapshot_prefix, iterations)
-                dis_filename = '%s_dis_%08d.pkl' % (config.snapshot_prefix, iterations)
-                print("Save generator to %s" % gen_filename)
-                print("Save discriminator to %s" % dis_filename)
-                torch.save(trainer.gen.state_dict(), gen_filename)
-                torch.save(trainer.dis.state_dict(), dis_filename)
+                #gen_filename = '%s_gen_%08d_alpha%08d.pkl' % (config.snapshot_prefix, iterations, config.alpha)
+                #dis_filename = '%s_dis_%08d_alpha%08d.pkl' % (config.snapshot_prefix, iterations, config.alpha)
+                #print("Save generator to %s" % gen_filename)
+                #print("Save discriminator to %s" % dis_filename)
+                #torch.save(trainer.gen.state_dict(), gen_filename)
+                #?torch.save(trainer.dis.state_dict(), dis_filename) 
             if iterations >= config.max_iter:
+		torch.save(trainer, 'trainer_alpha{}.pt'.format(config.alpha))
                 break
             iterations += 1
 
